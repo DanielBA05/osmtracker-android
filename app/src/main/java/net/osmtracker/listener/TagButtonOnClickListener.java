@@ -42,8 +42,12 @@ public class TagButtonOnClickListener implements OnClickListener {
 
 		String packageName = view.getContext().getPackageName();
 		intent.setPackage(packageName);
-
+		//Cambio: Daniel
 		view.getContext().sendBroadcast(intent);
+		// TODO: Open an attribute form after creating the waypoint.
+		// Allow multiple key-value attributes to be associated with
+		// the existing waypoint using its UUID.
+		// Preserve the current behavior for buttons without attributes.
 		
 		// Inform user that the waypoint was tracked
 		Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.tracklogger_tracked) + " " + label, Toast.LENGTH_SHORT).show();
