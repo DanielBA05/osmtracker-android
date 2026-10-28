@@ -51,6 +51,13 @@ public class TrackContentProvider extends ContentProvider {
 	/**
 	 * Uri for a specific waypoint by uuid
 	 */
+	
+	// TODO: Define a content URI for waypoint attributes.
+	// Extend the URI matcher and provider operations to support
+	// inserting, querying, updating, and deleting attributes
+	// associated with an existing waypoint UUID.
+	// Attribute deletion should also be handled when a waypoint is removed.
+
 	public static final Uri CONTENT_URI_WAYPOINT_UUID = Uri.parse("content://" + AUTHORITY + "/" + Schema.TBL_WAYPOINT + "/uuid");
 
 	/**

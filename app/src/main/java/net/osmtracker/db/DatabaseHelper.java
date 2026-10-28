@@ -142,6 +142,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 * v18: add TBL_NOTE
 	 *</pre>
 	 */
+	
+	// TODO: Add a WAYPOINT_ATTRIBUTE table in a future database version.
+	// Each record should contain a waypoint UUID, an attribute key,
+	// and its corresponding value.
+	// Update onCreate and onUpgrade to create the new table
+	// without deleting existing tracks or waypoints.
+
 	private static final int DB_VERSION = 18;
 
 	private Context context;

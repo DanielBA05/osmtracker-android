@@ -269,6 +269,11 @@ public class DataHelper {
 	 * @param link
 	 *				New link
 	 */
+	
+	// TODO: Extend waypoint management to support key-value attributes.
+	// Provide operations to save and retrieve attributes by waypoint UUID.
+	// Attribute updates must not create additional waypoints
+	// or modify the original GPS coordinates.
 	public void updateWayPoint(long trackId, String uuid, String name, String link) {
 		Log.v(TAG, "Updating waypoint with uuid '" + uuid + "'. New values: name='" + name + "', link='" + link + "'");
 		if (uuid != null) {
