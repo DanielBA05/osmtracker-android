@@ -282,6 +282,12 @@ public class UserDefinedLayoutReader {
 			// Standard tag button
 			button.setText(findLabel(parser.getAttributeValue(null, XmlSchema.ATTR_LABEL), resources));			
 			buttonIcon = iconResolver.getIcon(parser.getAttributeValue(null, XmlSchema.ATTR_ICON));
+			
+            // TODO: Support configurable attributes for tag buttons.
+            // Read attribute definitions from the button XML configuration.
+            // When configured, open a form to collect multiple key-value pairs.
+            // Associate all values with the same waypoint UUID.
+            // Keep the current behavior for buttons without attributes.
 			button.setOnClickListener(new TagButtonOnClickListener(currentTrackId));
 		} else if (XmlSchema.ATTR_VAL_VOICEREC.equals(buttonType)) {
 			// Voice record button
