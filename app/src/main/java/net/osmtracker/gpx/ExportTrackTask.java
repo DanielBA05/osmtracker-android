@@ -505,7 +505,12 @@ public abstract class ExportTrackTask extends AsyncTask<Void, Long, Boolean> {
 				String pressure_formatted = String.format("%.1f", pressure);
 				buff += "\t\t\t\t\t" + "<baro>" + pressure_formatted + "</baro>" + "\n";
 			}
-
+			// TODO: Retrieve all attributes associated with this waypoint UUID.
+            // Serialize the key-value pairs inside the GPX extensions element.
+            // Use a defined XML namespace and escape attribute values.
+            // Preserve existing compass and pressure extensions.
+            // Export one waypoint with multiple attributes, not multiple
+            // waypoints with duplicated GPS coordinates.
 			if(! buff.equals("")) {
 				out.append("\t\t\t\t" + "<extensions>\n");
 				out.append(buff);
