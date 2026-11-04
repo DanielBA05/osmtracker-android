@@ -39,7 +39,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		+ TrackContentProvider.Schema.COL_TIMESTAMP + " long not null,"
 		+ TrackContentProvider.Schema.COL_COMPASS + " double null,"
 		+ TrackContentProvider.Schema.COL_COMPASS_ACCURACY + " integer null,"
-		+ TrackContentProvider.Schema.COL_ATMOSPHERIC_PRESSURE + " double null" + ")";
+		+ TrackContentProvider.Schema.COL_ATMOSPHERIC_PRESSURE + " double null,"
+		+ TrackContentProvider.Schema.COL_SEG_ID + " integer not null default 0"
+		+ ")";
 
 	/**
 	 * SQL for creating index TRACKPOINT_idx (track id)
@@ -90,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		+ TrackContentProvider.Schema.COL_NAME + " text,"
 		+ TrackContentProvider.Schema.COL_DESCRIPTION + " text,"
 		+ TrackContentProvider.Schema.COL_TAGS + " text,"
-		+ TrackContentProvider.Schema.COL_OSM_VISIBILITY + " text default '"+ Track.OSMVisibility.Private+"',"
+		+ TrackContentProvider.Schema.COL_OSM_VISIBILITY + " text default '"+ Track.OSMVisibility.Identifiable.name()+"',"
 		+ TrackContentProvider.Schema.COL_START_DATE + " long not null,"
 		+ TrackContentProvider.Schema.COL_DIR + " text," // unused since DB_VERSION 13, since SQLite doesn't support to remove a column it will stay for now
 		+ TrackContentProvider.Schema.COL_ACTIVE + " integer not null default 0,"
@@ -119,6 +121,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public static final String DB_NAME = OSMTracker.class.getSimpleName();
 
+	// TODO: Add a WAYPOINT_ATTRIBUTE table in a future database version.
+	// Each record should contain a waypoint UUID, an attribute key,
+	// and its corresponding value.
+	// Bump DB_VERSION to 21, create the table in onCreate and add the
+	// matching case 20 in onUpgrade, without deleting existing tracks
+	// or waypoints.
+
 	/**
 	 * Database version.
 	 * If you change the version, be sure that {@link #onUpgrade(SQLiteDatabase, int, int)} can handle it.
@@ -140,16 +149,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 *          TBL_WAYPOINT.COL_COMPASS and TBL_WAYPOINT.COL_COMPASS_ACCURACY
 	 * v17: add TBL_TRACKPOINT.COL_ATMOSPHERIC_PRESSURE and TBL_WAYPOINT.COL_ATMOSPHERIC_PRESSURE
 	 * v18: add TBL_NOTE
+	 * v19: add TBL_TRACKPOINT.COL_SEG_ID for track segments support
+	 * v20: normalize TBL_TRACK.COL_OSM_VISIBILITY to Identifiable
 	 *</pre>
 	 */
-	
-	// TODO: Add a WAYPOINT_ATTRIBUTE table in a future database version.
-	// Each record should contain a waypoint UUID, an attribute key,
-	// and its corresponding value.
-	// Update onCreate and onUpgrade to create the new table
-	// without deleting existing tracks or waypoints.
-
-	private static final int DB_VERSION = 18;
+	private static final int DB_VERSION = 20;
 
 	private Context context;
 
@@ -196,7 +200,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL("alter table " + TrackContentProvider.Schema.TBL_TRACK + " add column " + TrackContentProvider.Schema.COL_DESCRIPTION + " text");
 			db.execSQL("alter table " + TrackContentProvider.Schema.TBL_TRACK + " add column " + TrackContentProvider.Schema.COL_TAGS + " text");
 			db.execSQL("alter table " + TrackContentProvider.Schema.TBL_TRACK + " add column " + TrackContentProvider.Schema.COL_OSM_VISIBILITY
-					+ " text default '"+ Track.OSMVisibility.Private+"'");
+					+ " text default '"+ Track.OSMVisibility.Identifiable.name()+"'");
 		case 14:
 			db.execSQL("alter table " + TrackContentProvider.Schema.TBL_TRACKPOINT + " add column " + TrackContentProvider.Schema.COL_SPEED + " double null");
 		case 15:
@@ -209,6 +213,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL("alter table " + TrackContentProvider.Schema.TBL_WAYPOINT + " add column " + TrackContentProvider.Schema.COL_ATMOSPHERIC_PRESSURE + " double null");
 		case 17:
 			db.execSQL(SQL_CREATE_TABLE_NOTE);
+		case 18:
+			db.execSQL("alter table "+TrackContentProvider.Schema.TBL_TRACKPOINT + " add column " + TrackContentProvider.Schema.COL_SEG_ID + " integer default 0");
+		case 19:
+			db.execSQL("update " + TrackContentProvider.Schema.TBL_TRACK
+					+ " set " + TrackContentProvider.Schema.COL_OSM_VISIBILITY + " = ?"
+					+ " where " + TrackContentProvider.Schema.COL_OSM_VISIBILITY + " is null"
+					+ " or " + TrackContentProvider.Schema.COL_OSM_VISIBILITY + " not in (?, ?)",
+					new Object[]{
+							Track.OSMVisibility.Identifiable.name(),
+							Track.OSMVisibility.Trackable.name(),
+							Track.OSMVisibility.Identifiable.name()
+			});
 		}
 	}
 
