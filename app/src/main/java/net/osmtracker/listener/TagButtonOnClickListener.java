@@ -42,7 +42,7 @@ public class TagButtonOnClickListener implements OnClickListener {
 
 		String packageName = view.getContext().getPackageName();
 		intent.setPackage(packageName);
-		//Cambio: Daniel
+
 		view.getContext().sendBroadcast(intent);
 		// TODO: Open an attribute form after creating the waypoint.
 		// Allow multiple key-value attributes to be associated with

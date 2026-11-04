@@ -132,7 +132,7 @@ public class GPSLogger extends Service implements LocationListener {
 							String uuid = extras.getString(OSMTracker.INTENT_KEY_UUID);
 							String name = extras.getString(OSMTracker.INTENT_KEY_NAME);
 							String link = extras.getString(OSMTracker.INTENT_KEY_LINK);
-							//Cambio: Daniel
+							
 							// TODO: Support saving multiple attributes for an existing waypoint.
 							// The waypoint UUID should identify the element being described.
 							// Attribute updates must reuse the original waypoint coordinates
