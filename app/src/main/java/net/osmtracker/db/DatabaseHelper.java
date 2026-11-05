@@ -127,6 +127,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// Bump DB_VERSION to 21, create the table in onCreate and add the
 	// matching case 20 in onUpgrade, without deleting existing tracks
 	// or waypoints.
+	// Note: do not enforce a UNIQUE constraint on (waypoint_uuid, key).
+	// Repeated keys must be allowed (e.g. several "image" attributes for
+	// multiple photos). Do not add a strict foreign key to waypoint: attributes
+	// may be written before the waypoint row exists (asynchronous broadcast).
 
 	/**
 	 * Database version.

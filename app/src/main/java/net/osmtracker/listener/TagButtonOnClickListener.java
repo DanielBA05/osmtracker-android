@@ -48,6 +48,10 @@ public class TagButtonOnClickListener implements OnClickListener {
 		// Allow multiple key-value attributes to be associated with
 		// the existing waypoint using its UUID.
 		// Preserve the current behavior for buttons without attributes.
+		// TODO: Persist the active waypoint UUID (e.g. SharedPreferences) and save
+		// each attribute as soon as it is edited, not only when "Done" is pressed.
+		// If the app is killed or interrupted (phone call), restore the form on
+		// resume; if not restored, the waypoint just keeps its label (same as "Skip").
 		
 		// Inform user that the waypoint was tracked
 		Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.tracklogger_tracked) + " " + label, Toast.LENGTH_SHORT).show();

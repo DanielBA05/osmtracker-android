@@ -138,6 +138,11 @@ public class GPSLogger extends Service implements LocationListener {
 							// Attribute updates must reuse the original waypoint coordinates
 							// instead of requesting a new GPS location for each attribute.
 							// Coordinate with DataHelper to persist the attributes separately.
+							// TODO: lastLocation can be null here and currently nothing is saved and the
+							// user is not informed. Notify the UI (e.g. broadcast or Toast) so the form
+							// is not opened and no "saved" message is shown without a valid position.
+							// Do not assume ordering between INTENT_TRACK_WP and attribute intents:
+							// ignore or retry attributes whose waypoint does not exist yet.
 							dataHelper.wayPoint(trackId, lastLocation, name, link, uuid, sensorListener.getAzimuth(), sensorListener.getAccuracy(), pressureListener.getPressure());
 
 							// If there is a waypoint in the track, there should also be a trackpoint
