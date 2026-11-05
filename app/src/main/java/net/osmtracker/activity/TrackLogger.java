@@ -611,6 +611,10 @@ public class TrackLogger extends Activity {
 		case REQCODE_IMAGE_CAPTURE:
 			if (resultCode == RESULT_OK) {
 				if (currentPhotoFile != null && currentPhotoFile.exists()) {
+					// TODO: If an attribute form is active, do not create a new waypoint here.
+					// Send the active waypoint UUID instead and attach this photo to it
+					// (first photo in the "link" column, additional ones as "image" attributes).
+					// Without an active form, keep the current behavior (new waypoint per photo).
 					Intent intent = new Intent(OSMTracker.INTENT_TRACK_WP);
 					intent.putExtra(OSMTracker.INTENT_KEY_UUID, UUID.randomUUID().toString());
 					intent.putExtra(TrackContentProvider.Schema.COL_TRACK_ID, currentTrackId);
@@ -635,6 +639,10 @@ public class TrackLogger extends Activity {
 					FileSystemUtils.copyFile(destFile.getParentFile(), new File(imagePath), destFile.getName());
 
 					// Send an intent to inform service to track the waypoint.
+					// TODO: If an attribute form is active, do not create a new waypoint here.
+					// Send the active waypoint UUID instead and attach this photo to it
+					// (first photo in the "link" column, additional ones as "image" attributes).
+					// Without an active form, keep the current behavior (new waypoint per photo).
 					Intent intent = new Intent(OSMTracker.INTENT_TRACK_WP);
 					intent.putExtra(OSMTracker.INTENT_KEY_UUID, UUID.randomUUID().toString());
 					intent.putExtra(TrackContentProvider.Schema.COL_TRACK_ID, currentTrackId);
