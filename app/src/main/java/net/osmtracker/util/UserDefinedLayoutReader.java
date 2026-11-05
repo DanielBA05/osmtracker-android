@@ -288,6 +288,21 @@ public class UserDefinedLayoutReader {
             // When configured, open a form to collect multiple key-value pairs.
             // Associate all values with the same waypoint UUID.
             // Keep the current behavior for buttons without attributes.
+            // TODO: Proposed XML format for attribute definitions (the parser does not
+            // read child elements of <button> yet). "label" is what the user sees;
+            // "key"/"value" are what is stored and exported (e.g. backrest=yes).
+            // Supported types: choice, boolean, number, text.
+            //
+            // <button type="tag" label="BANCA">
+            //   <attribute key="material" label="Material" type="choice">
+            //     <option value="metal" label="Metal"/>
+            //     <option value="wood" label="Madera"/>
+            //   </attribute>
+            //   <attribute key="backrest" label="Espaldar" type="boolean"/>
+            //   <attribute key="seats" label="Asientos" type="number"/>
+            //   <attribute key="armrest" label="Reposabrazos" type="boolean"/>
+            //   <attribute key="colour" label="Color" type="text"/>
+            // </button>
 			button.setOnClickListener(new TagButtonOnClickListener(currentTrackId));
 		} else if (XmlSchema.ATTR_VAL_VOICEREC.equals(buttonType)) {
 			// Voice record button
