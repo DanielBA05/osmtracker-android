@@ -153,6 +153,10 @@ public class TextNoteDialog extends AlertDialog {
 			if (wayPointUuid == null) {
 				// there is no UUID set for the waypoint we're working on
 				// so we need to generate a UUID and track this point
+				// TODO: If an attribute form is active, reuse its waypoint UUID instead of
+				// calling UUID.randomUUID() and sending INTENT_TRACK_WP. Use INTENT_UPDATE_WP
+				// (already used below in this class) so the note/recording is attached to
+				// the active waypoint and no new GPS position is requested.
 				wayPointUuid = UUID.randomUUID().toString();
 				Intent intent = new Intent(OSMTracker.INTENT_TRACK_WP);
 				intent.putExtra(TrackContentProvider.Schema.COL_TRACK_ID, wayPointTrackId);
